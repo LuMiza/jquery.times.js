@@ -1,6 +1,7 @@
 /**
  * 时间处理
  * @author:Rumble
+ * @url: https://github.com/LuMiza/jquery.times.js
  *
  * @param option参数说明
  *        start: 倒计时开始时间【时间戳】  end:倒计时结束时间【时间戳】
