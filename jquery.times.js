@@ -136,7 +136,6 @@ $date.prototype = {
             throw new Error('downFormatCall is undefined');
 		}
 		var leave = _this.options.leave_time;
-		console.log(leave);
         var day = parseInt(leave / 86400);
         var hour = parseInt(leave / (3600)) - day * 24;
         var minute = parseInt(leave / 60) - (day * 1440) - (hour * 60);
