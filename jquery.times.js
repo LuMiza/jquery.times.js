@@ -4,9 +4,9 @@
  * @url: https://github.com/LuMiza/jquery.times.js
  *
  * @param option参数说明
- *        start: 倒计时开始时间【时间戳】  end:倒计时结束时间【时间戳】
+ *        end:倒计时结束时间【时间戳】
  *        show:当前时间显示【选择器】   endCallback:倒计时结束后的回调
- *        countDownCall:倒计时计时过程中的回调【有三个参数，依次为current_time[当前计时器时间],start,end】,
+ *        countDownCall:倒计时计时过程中的回调【有三个参数，依次为current_time[当前计时器时间],end[结束时间]】,
  *        downFormatCall:倒计时格式化回调【有四个参数，依次为day[日],hour[小时],minute[分钟],second[秒]】
  *
  * @returns {$date.init}
@@ -102,9 +102,6 @@ $date.prototype = {
 	countDown:function(){
 		var _this = this;
 		//活动开始时间start 时间戳   活动结束时间end  时间戳
-		if (typeof _this.options.start == 'undefined') {
-            throw new Error('start  is  undefined');
-		}
 		if (typeof _this.options.end == 'undefined') {
             throw new Error('end  is  undefined');
 		}
@@ -114,8 +111,7 @@ $date.prototype = {
         if (typeof _this.options.countDownCall != 'function') {
             throw new Error('countDownCall  is  undefined');
         }
-        //var currentTime = this.getTimestamp();
-        var currentTime = _this.options.start;
+        var currentTime = this.getTimestamp();
         console.log(_this.options);
         var int = setInterval(function(){
             if( currentTime == _this.options.end ){
@@ -123,7 +119,7 @@ $date.prototype = {
                 _this.options.endCallback();//如果符合某个条件 就执行回调
                 clearInterval(int);
             }
-            _this.options.countDownCall(currentTime, _this.options.start, _this.options.end);
+            _this.options.countDownCall(currentTime, _this.options.end);
             currentTime++;
         },1000);
 		return;
@@ -140,6 +136,7 @@ $date.prototype = {
             throw new Error('downFormatCall is undefined');
 		}
 		var leave = _this.options.leave_time;
+		console.log(leave);
         var day = parseInt(leave / 86400);
         var hour = parseInt(leave / (3600)) - day * 24;
         var minute = parseInt(leave / 60) - (day * 1440) - (hour * 60);
