@@ -13,7 +13,7 @@
  */
 var $date = function(option) {
     if(typeof $ == 'undefined'){
-        throw new Error('请引入jquery，$  is  undefined');
+        throw new Error('include jquery，$  is  undefined');
     }
     return  new $date.prototype.init(option);
 }
@@ -112,9 +112,9 @@ $date.prototype = {
             throw new Error('countDownCall  is  undefined');
         }
         var currentTime = this.getTimestamp();
-        console.log(_this.options);
+        // console.log(_this.options);
         var int = setInterval(function(){
-            if( currentTime == _this.options.end ){
+            if(currentTime==_this.options.end  || (_this.options.end-currentTime)<0){
                 console.log('this is end');
                 _this.options.endCallback();//如果符合某个条件 就执行回调
                 clearInterval(int);
@@ -136,10 +136,13 @@ $date.prototype = {
             throw new Error('downFormatCall is undefined');
 		}
 		var leave = _this.options.leave_time;
-        var day = parseInt(leave / 86400);
-        var hour = parseInt(leave / (3600)) - day * 24;
-        var minute = parseInt(leave / 60) - (day * 1440) - (hour * 60);
-        var second = parseInt(leave - (day * 86400) - (hour * 3600) - (minute * 60));
+		var day=0,hour=0,minute=0,second=0;
+		if (leave > 0) {
+            day = parseInt(leave / 86400);
+            hour = parseInt(leave / (3600)) - day * 24;
+            minute = parseInt(leave / 60) - (day * 1440) - (hour * 60);
+            second = parseInt(leave - (day * 86400) - (hour * 3600) - (minute * 60));
+		}
         if(hour < 10) {
             hour = '0' + hour;
         }
