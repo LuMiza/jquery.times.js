@@ -9,10 +9,11 @@
  *        show:当前时间显示【选择器】   endCallback:倒计时结束后的回调
  *        countDownCall:倒计时计时过程中的回调【有三个参数，依次为current_time[当前计时器时间],end[结束时间]】,
  *        downFormatCall:倒计时格式化回调【有四个参数，依次为day[日],hour[小时],minute[分钟],second[秒]】
+ *        leave_time: 时间差【秒】
  *        
  */
 ```
-* ####用法实例：
+* #### 用法实例：
 ```javascript
 //获取当前时间
 $date().getCurrentTime();//2018-10-08 16:14:27
