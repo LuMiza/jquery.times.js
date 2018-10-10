@@ -226,7 +226,7 @@ $date.prototype = {
 			return temp_callback(yy, mm, dd, hh, ii, ss);
         }
 		//yyyy-mm-dd hh:ii:ss
-		if (/^yyyy-mm-dd\s+hh\:ii\:ss$/gi.test(date_format)) {
+		if (/^default/gi.test(date_format)) {
 			return yy +'-' + mm + '-' + dd + ' ' + hh + ':' + ii + ':' +ss;
 		}
 		if (/^y$/gi.test(date_format)) {
