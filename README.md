@@ -77,6 +77,9 @@ $date({
          console.log( 'minute='+ minute );
          console.log( 'second='+ second );
      }}).downFormat();
+ //转换为时间戳
+ $date().strtotime('2018-10-10 09:21:09');//1539134469
+ $date().strtotime('1539134469');//1539134469
  
  //格式化时间
  $date().format();//2018-10-10 10:53:36
