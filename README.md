@@ -1,5 +1,5 @@
 # js.times.js
-#### js的时间处理，包含倒计时，当前时间显示，格式化时间戳等
+#### 原生js的时间处理，不依赖任何第三方js类库，包含倒计时，当前时间显示，格式化时间戳等
 #### Author: Rumble
 #### url:https://github.com/LuMiza/js.times.js
 ```javascript
