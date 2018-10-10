@@ -35,7 +35,7 @@
 |        i:s      |     分钟 秒     |53:36|
 
 * @param time 指定时间，如果未指定则为当前时间  [可以为时间戳，或者字符串类型的时间格式]
-* @param callback 回调，如果定义回调，则回调函数应设置return     [如果time 或者 type 定义为callback，那么将会自动转成回调，执行的是最后一个回调]
+* @param callback 回调，如果定义回调，则回调函数应设置return     [如果time 或者 type 定义为callback，那么将会自动转成回调，执行的是最后一个回调]  回调函数将会有六个参数,依次分别为 yy 年, mm 月, dd 日, hh 时, ii 分, ss 秒；回调参数命名可以自定义，不一定为举例的yy
 
 * #### 用法实例：
 ```javascript

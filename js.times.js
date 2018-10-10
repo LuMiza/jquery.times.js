@@ -176,6 +176,7 @@ $date.prototype = {
 	 * @param time 指定时间，如果未指定则为当前时间
 	 * @param callback 回调，如果定义回调，则回调函数应设置return
 	 *                [如果time 或者 type 定义为callback，那么将会自动转成回调，执行的是最后一个回调]
+	 *                回调函数将会有六个参数 yy 年, mm 月, dd 日, hh 时, ii 分, ss 秒
 	 *
 	 * @returns {string|number}
 	 */
