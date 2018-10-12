@@ -1,15 +1,14 @@
 /**
  * 时间处理, 无依赖任何第三方js类库，使用原生js处理
  * @author:Rumble
+ *
+ * @version 2.0
+ *
  * @url: https://github.com/LuMiza/js.times.js
  *
  * @param option参数说明
  *        end:倒计时结束时间【时间戳】
- *        show:当前时间显示【选择器】   endCallback:倒计时结束后的回调
- *        countDownCall:倒计时计时过程中的回调【有三个参数，依次为current_time[当前计时器时间],end[结束时间]】,
- *        downFormatCall:倒计时格式化回调【有四个参数，依次为day[日],hour[小时],minute[分钟],second[秒]】
- *
- *
+ *        show:当前时间显示【选择器】
  *
  * @returns {$date.init}
  */
@@ -29,33 +28,15 @@ $date.prototype = {
 	 * 当前时间  静态时间  yyyy-mm-dd HH:mm:ss
      * @returns {string}
      */
-    getCurrentTime: function(){
+    date: function(){
 		var _this = this;
-		var dateObj = new Date();
-		var year = dateObj.getFullYear();//年
-		var month = dateObj.getMonth()+1;//月
-		var day = dateObj.getDate();//日
-		var hh = dateObj.getHours();//时
-		var mm = dateObj.getMinutes();//分
-		var ss = dateObj.getSeconds();//秒
-		var str = year + '-';
-		( month < 10 ) ? str += '0': ''; 
-		str += month + '-';
-		( day < 10 ) ? str += '0' : '';
-		str += day + ' ';
-		( hh < 10 ) ? str += '0' : '';
-		str += hh + ':';
-		( mm < 10 ) ? str += '0' : '';
-		str += mm + ':';
-		( ss < 10 ) ? str += '0' : '';
-		str += ss;
-		return str;
+		return _this.format();
 	},
     /**
 	 * 时间戳  秒
      * @returns {number}
      */
-    getTimestamp: function(){
+    time: function(){
 		var _this = this;
 		var dateObj = new Date();
 		return  Math.floor(dateObj.getTime()/1000);
@@ -63,88 +44,100 @@ $date.prototype = {
     /**
 	 * 当前动态时间  yyyy-mm-dd HH:mm:ss
      */
-	getRuningTime:function(){
+	now:function(callback){
         var _this = this;
-		if (typeof _this.options.show == 'undefined') {
-			return;
+        var is_call = false;
+        if ((typeof callback != 'undefined') && (typeof callback == 'function')) {
+            is_call = true;
+        }
+        if (! is_call) {
+            if (typeof _this.options.show == 'undefined') {
+                throw new Error('show  is  undefined.');
+            }
+			var format = (typeof _this.options.format == 'undefined')? 'default': _this.options.format;
 		}
-		var time = _this.getTimestamp();
-		// $(_this.options.show).html(_this.getCurrentTime());
+		var time = _this.time();
 		if (typeof document.querySelector == 'undefined') {
 			throw new Error('document.querySelector  is  undefined, please upgrade browser.');
 		}
-		document.querySelector(_this.options.show).innerHTML = _this.getCurrentTime();
-		var int = setInterval(function(){
+		if (! is_call) {
+            document.querySelector(_this.options.show).innerHTML = _this.format(format, time);
+		} else {
+			callback(_this.format('json', time));
+		}
+		var timer = setInterval(function(){
 			time++;
-			var tempObj = new Date(time*1000);
-			var year = tempObj.getFullYear();//年
-			var month = tempObj.getMonth()+1;//月
-			var day = tempObj.getDate();//日
-			var hh = tempObj.getHours();//时
-			var mm = tempObj.getMinutes();//分
-			var ss = tempObj.getSeconds();//秒
-			var str = year + '-';
-			( month < 10 ) ? str += '0': '';
-			str += month + '-';
-			( day < 10 ) ? str += '0': '';
-			str += day + ' ';
-			( hh < 10 ) ? str += '0': '';
-			str += hh + ':';
-			( mm < 10 ) ? str += '0': '';
-			str += mm + ':';
-			( ss < 10 ) ? str += '0': '';
-			str += ss;
-			// $(_this.options.show).html(str);
-			document.querySelector(_this.options.show).innerHTML = str;
+			if (! is_call) {
+                document.querySelector(_this.options.show).innerHTML = _this.format(format, time);
+			} else {
+                callback(_this.format('json', time));
+			}
 		},1000);
-		
+		return timer;
 	},
     /**
 	 * 倒计时
+     * @param callback 回调函数
+     * @returns {number}
      */
-	countDown:function(){
+	counting:function(callback){
 		var _this = this;
-		//活动开始时间start 时间戳   活动结束时间end  时间戳
+		/*结束时间end  时间戳*/
 		if (typeof _this.options.end == 'undefined') {
             throw new Error('end  is  undefined');
 		}
-		if (typeof _this.options.endCallback != 'function') {
-            throw new Error('endCallback  is  undefined');
+		if (typeof callback =='undefined') {
+            throw new Error('callback  is  undefined');
 		}
-        if (typeof _this.options.countDownCall != 'function') {
-            throw new Error('countDownCall  is  undefined');
-        }
-        var currentTime = this.getTimestamp();
-        // console.log(_this.options);
-        var int = setInterval(function(){
-            if(currentTime==_this.options.end  || (_this.options.end-currentTime)<0){
-                console.log('this is end');
-                _this.options.endCallback();//如果符合某个条件 就执行回调
-                clearInterval(int);
+		if (typeof callback != 'function') {
+            throw new Error('callback  is  not function');
+		}
+		var is_num = false;
+		if (typeof _this.options.end == 'number') {
+            if (/^[1-9]{1}\d{0,2}$/g.test(_this.options.end)) {
+                is_num = true;
             }
-            _this.options.countDownCall(currentTime, _this.options.end);
-            currentTime++;
+		}
+        var current_time = this.time();
+		if (! is_num) {
+            var end = _this.strtotime(_this.options.end);
+		} else {
+            var end = _this.options.end + current_time;
+		}
+		var status = true;/*代表当前计时器的运行状态*/
+        var timer = setInterval(function(){
+            if(current_time==end  || (end-current_time)<0){
+                status = false;/*代表当前计时器，停止计时*/
+                clearInterval(timer);
+            }
+            callback(_this.downFormat((end-current_time), status));
+            current_time++;
         },1000);
-		return;
+		return timer;
 	},
     /**
 	 * 格式化倒计时
+     * @param leave 时间差
+     * @param status  倒计时执行状态:true  false
+     * @returns {{status: boolean, d: number, h: number, i: number, s: number}}
      */
-    downFormat:function(){
+    downFormat:function(leave, status){
 		var _this = this;
-		if (typeof _this.options.leave_time == 'undefined') {
-			throw new Error('leave_time is undefined');
+		if (typeof leave == 'undefined') {
+			throw new Error('leave is undefined');
 		}
-		if (typeof _this.options.downFormatCall != 'function') {
-            throw new Error('downFormatCall is undefined');
+		if (typeof status == 'undefined') {
+            throw new Error('status is undefined');
 		}
-		var leave = _this.options.leave_time;
-		var day=0,hour=0,minute=0,second=0;
+		var day=0,
+			hour=0,
+			minute=0,
+			second=0;
 		if (leave > 0) {
-            day = parseInt(leave / 86400);
-            hour = parseInt(leave / (3600)) - day * 24;
-            minute = parseInt(leave / 60) - (day * 1440) - (hour * 60);
-            second = parseInt(leave - (day * 86400) - (hour * 3600) - (minute * 60));
+            day = Math.floor(leave / (60 * 60 * 24));
+            hour = Math.floor(leave / (60 * 60)) - day * 24;
+            minute = Math.floor(leave / 60) - (day * 60 * 24) - (hour * 60);
+            second = Math.floor(leave - (day * (60 * 60 * 24)) - (hour * 60 * 60 ) - (minute * 60));
 		}
         if(hour < 10) {
             hour = '0' + hour;
@@ -155,7 +148,13 @@ $date.prototype = {
         if(second < 10) {
             second = '0' + second;
         }
-        _this.options.downFormatCall(day, hour, minute, second);
+        return {
+			status: status,
+			d: day,
+			h: hour,
+			i: minute,
+			s: second
+		};
 	},
     /**
 	 * 格式化时间，将时间转换为时间戳
@@ -196,7 +195,7 @@ $date.prototype = {
 			date_format = type;
 		}
 		if ((typeof time == 'undefined') && (typeof time != 'function')) {
-			date_time = _this.getTimestamp();
+			date_time = _this.time();
 		} else {
 			date_time = _this.strtotime(time);
 		}
@@ -229,6 +228,16 @@ $date.prototype = {
 		if (/^default/gi.test(date_format)) {
 			return yy +'-' + mm + '-' + dd + ' ' + hh + ':' + ii + ':' +ss;
 		}
+        if (/^json/gi.test(date_format)) {
+            return {
+            	y:yy,
+				m:mm,
+				d:dd,
+				h:hh,
+				i:ii,
+				s:ss
+			};
+        }
 		if (/^y$/gi.test(date_format)) {
 			return yy;
 		}

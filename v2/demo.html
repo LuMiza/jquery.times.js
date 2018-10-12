@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="Generator" content="EditPlus®">
+  <meta name="Author" content="">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+  <title>times</title>
+  <style type="text/css">
+  	body{
+  		margin: 0px;
+  		padding: 0px;
+  	}
+   .container{
+        margin:2% auto;
+       max-width: 900px;
+   }
+   .container .common{
+    width:inherit;height:50px;
+    text-align: center;
+    line-height: 50px;
+    font-size:2em;
+    display: inline-block;
+   }
+    .container .bt{
+        width: inherit;
+        padding: 10px;
+        background-color: #009688;
+        border:none;
+        border-radius: 3px;
+        color: #FFFFFF;
+        cursor: pointer;
+    }
+    .container .input{
+        width:200px;
+        height:38px;
+        border: 1px solid #525252;
+        border-radius: 5px;
+        font-size: 1.2em;
+    }
+   .container > fieldset {
+       border: 2px solid #5F5F5F;
+       border-radius: 10px;
+       margin-top:10px;
+   }
+    .container .box{
+        padding: 5px 5px;
+        list-style: none;
+        padding:5px;
+        margin:0px;
+    }
+   .hide{
+    display: none!important;
+   }
+      h1{
+          width: 100%;
+          text-align: center;
+      }
+  </style>
+     <h1>使用演示</h1>
+  <div class="container">
+        <!--当前动态时间-->
+         <fieldset>
+             <legend>当前动态时间</legend>
+             <ul class="box">
+                 <li>
+                    <div  class='common now'></div>
+                 </li>
+                 <li>
+                     <button id="get-now-bt" class="bt">时间停止</button>
+                 </li>
+                 <li>
+                     <pre>
+ 使用1：
+ $date({show:'.now'}).now();
+ 如果让时间停止，如下操作：
+ var init = $date({show:'.now'}).now();
+ window.clearInterval(init);
+
+ 使用2：
+  $date({show:'.now',format:'default'}).now();
+
+ 使用3：
+ var now_init = $date().now(function(d){
+        $('.now').html(d.y +'-' + d.m + '-' + d.d + ' ' + d.h + ':' + d.i + ':' +d.s);
+});
+                     </pre>
+                 </li>
+             </ul>
+         </fieldset>
+            <!--当前静态时间-->
+          <fieldset>
+              <legend>当前静态时间</legend>
+              <ul class="box">
+                  <li>
+                      <div  class='common date'></div>
+                  </li>
+                  <li>
+                      <button id="get-date-bt" class="bt">当前静态时间</button>
+                  </li>
+                  <li>
+                      <code>$date().date();</code>
+                  </li>
+              </ul>
+          </fieldset>
+        <!--当前时间戳-->
+          <fieldset>
+              <legend>当前时间戳</legend>
+              <ul class="box">
+                  <li>
+                      <div  class='common time'></div>
+                  </li>
+                  <li>
+                      <button id="get-time-bt" class="bt">当前时间戳</button>
+                  </li>
+                  <li>
+                      <code>$date().time();</code>
+                  </li>
+              </ul>
+          </fieldset>
+         <!--将时间格式化时间戳-->
+          <fieldset>
+              <legend>将时间格式化时间戳</legend>
+              <ul class="box">
+                  <li>
+                      <input id="strtotime-input" type="text" class="input ">
+                  </li>
+                  <li>
+                      <div  class='common strtotime'></div>
+                  </li>
+                  <li>
+                      <button id="get-strtotime-bt" class="bt">将时间格式化时间戳</button>
+                  </li>
+                  <li>
+                      <code>$date().strtotime('2018-10-12 10:33:31');</code>
+                  </li>
+              </ul>
+          </fieldset>
+            <!--倒计时-->
+          <fieldset>
+              <legend>倒计时 1</legend>
+              <ul class="box">
+                  <li>
+                      <div  class='common count_down_1'></div>
+                  </li>
+                  <li>
+                      <pre>
+$date({
+    end:'2018-10-12 10:42:01'
+}).counting(function(d){
+    console.log(d);
+    $('.count_down_1').html('day:'+d.d + '  hour:'+d.h + ' minute:'+d.i+' second:'+d.s);
+});
+                      </pre>
+                  </li>
+              </ul>
+          </fieldset>
+      <!--30秒倒计时-->
+          <fieldset>
+              <legend>30秒倒计时</legend>
+              <ul class="box">
+                  <li>
+                      <button class="bt count_down_2" type="button">获取验证码</button>
+                  </li>
+                  <li>
+                      <pre>
+$date({
+    end:30
+}).counting(function(d){
+    console.log(d);
+    if (d.status) {
+        $('.count_down_2').css({backgroundColor:'gray'});
+        $('.count_down_2').html(parseInt(d.s)+'秒后重新获取');
+    } else {
+        $('.count_down_2').css({backgroundColor:'#009688'});
+        $('.count_down_2').html('获取验证码');
+        $('.count_down_2').removeAttr('data-click');
+    }
+});
+                      </pre>
+                  </li>
+              </ul>
+          </fieldset>
+  </div>
+  <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+  <script type="text/javascript" src="js.times.js"></script>
+ </head>
+ <body>
+ 
+<script type="text/javascript">
+$(function(){
+
+    //当前动态时间
+    var now_init = $date({
+        show:'.now',
+        format:'default'
+    }).now();
+	/*var now_init = $date().now(function(d){
+        $('.now').html(d.y +'-' + d.m + '-' + d.d + ' ' + d.h + ':' + d.i + ':' +d.s);
+    });
+	*/
+    $('#get-now-bt').click(function(){
+        window.clearInterval(now_init);
+    });
+
+
+    //当前静态时间
+	$('#get-date-bt').click(function(){
+        $('.date').html($date().date());
+    });
+
+	//当前时间戳
+    $('#get-time-bt').click(function(){
+        $('.time').html($date().time());
+    });
+
+    //将时间格式化时间戳
+    $('#strtotime-input').val($date().date());
+    $('#get-strtotime-bt').click(function(){
+        var val  = $('#strtotime-input').val();
+        if (val != '') {
+            $('.strtotime').html($date().strtotime(val));
+        }
+    });
+
+    //倒计时
+    $date({
+        end:$date().time()+99999
+    }).counting(function(d){
+        console.log(d);
+        $('.count_down_1').html('day:'+d.d + '  hour:'+d.h + ' minute:'+d.i+' second:'+d.s);
+    });
+
+    $('.count_down_2').click(function(){
+        // $('.count_down_2').css({backgroundColor:'gray'});
+        // $('.count_down_2').html(parseInt(30)+'秒后重新获取');
+        if ( typeof $(this).attr('data-click') == 'undefined') {
+            $(this).attr('data-click',1);
+            $date({
+                end:30
+            }).counting(function(d){
+                console.log(d);
+                if (d.status) {
+                    $('.count_down_2').css({backgroundColor:'gray'});
+                    $('.count_down_2').html(parseInt(d.s)+'秒后重新获取');
+                } else {
+                    $('.count_down_2').css({backgroundColor:'#009688'});
+                    $('.count_down_2').html('获取验证码');
+                    $('.count_down_2').removeAttr('data-click');
+                }
+            });
+        }
+    });
+
+
+});
+</script>
+
+ </body>
+</html>
