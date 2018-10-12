@@ -2,6 +2,8 @@
  * 时间处理, 无依赖任何第三方js类库，使用原生js处理
  * @author:Rumble
  * @version 2.0
+ *
+ * 使用说明请前往以下链接的 v2.0
  * @url: https://github.com/LuMiza/js.times.js
  *
  * @param option参数说明
