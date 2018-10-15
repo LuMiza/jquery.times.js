@@ -18,6 +18,47 @@
         return  new $date.prototype.init(option);
     };
 
+    /**
+     * 格式化倒计时
+     * @param leave 时间差
+     * @param status  倒计时执行状态:true  false
+     * @returns {{status: boolean, d: number, h: number, i: number, s: number}}
+     */
+    function downFormat(leave, status){
+        if (typeof leave == 'undefined') {
+            throw new Error('leave is undefined');
+        }
+        if (typeof status == 'undefined') {
+            throw new Error('status is undefined');
+        }
+        var day=0,
+            hour=0,
+            minute=0,
+            second=0;
+        if (leave > 0) {
+            day = Math.floor(leave / (60 * 60 * 24));
+            hour = Math.floor(leave / (60 * 60)) - day * 24;
+            minute = Math.floor(leave / 60) - (day * 60 * 24) - (hour * 60);
+            second = Math.floor(leave - (day * (60 * 60 * 24)) - (hour * 60 * 60 ) - (minute * 60));
+        }
+        if(hour < 10) {
+            hour = '0' + hour;
+        }
+        if(minute < 10) {
+            minute = '0' + minute;
+        }
+        if(second < 10) {
+            second = '0' + second;
+        }
+        return {
+            status: status,
+            d: day,
+            h: hour,
+            i: minute,
+            s: second
+        };
+    }
+
     $date.prototype = {
         options:null,
         init: function(option) {
@@ -112,51 +153,10 @@
                     status = false;/*代表当前计时器，停止计时*/
                     clearInterval(timer);
                 }
-                callback(_this.downFormat((end-current_time), status));
+                callback(downFormat((end-current_time), status));
                 current_time++;
             },1000);
             return timer;
-        },
-        /**
-         * 格式化倒计时
-         * @param leave 时间差
-         * @param status  倒计时执行状态:true  false
-         * @returns {{status: boolean, d: number, h: number, i: number, s: number}}
-         */
-        downFormat:function(leave, status){
-            var _this = this;
-            if (typeof leave == 'undefined') {
-                throw new Error('leave is undefined');
-            }
-            if (typeof status == 'undefined') {
-                throw new Error('status is undefined');
-            }
-            var day=0,
-                hour=0,
-                minute=0,
-                second=0;
-            if (leave > 0) {
-                day = Math.floor(leave / (60 * 60 * 24));
-                hour = Math.floor(leave / (60 * 60)) - day * 24;
-                minute = Math.floor(leave / 60) - (day * 60 * 24) - (hour * 60);
-                second = Math.floor(leave - (day * (60 * 60 * 24)) - (hour * 60 * 60 ) - (minute * 60));
-            }
-            if(hour < 10) {
-                hour = '0' + hour;
-            }
-            if(minute < 10) {
-                minute = '0' + minute;
-            }
-            if(second < 10) {
-                second = '0' + second;
-            }
-            return {
-                status: status,
-                d: day,
-                h: hour,
-                i: minute,
-                s: second
-            };
         },
         /**
          * 格式化时间，将时间转换为时间戳
