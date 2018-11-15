@@ -137,6 +137,24 @@
                   </li>
               </ul>
           </fieldset>
+      <!--将时间戳格式化时间-->
+      <fieldset>
+          <legend>将时间戳 格式化 时间</legend>
+          <ul class="box">
+              <li>
+                  <input id="timestamp-input" type="text" class="input ">
+              </li>
+              <li>
+                  <div  class='common timestamp'></div>
+              </li>
+              <li>
+                  <button id="get-timestamp-of-date-bt" class="bt">将时间格式化时间戳</button>
+              </li>
+              <li>
+                  <code>$date().format('default',1542267696)</code>
+              </li>
+          </ul>
+      </fieldset>
             <!--倒计时-->
           <fieldset>
               <legend>倒计时 1</legend>
@@ -221,6 +239,14 @@ $(function(){
         var val  = $('#strtotime-input').val();
         if (val != '') {
             $('.strtotime').html($date().strtotime(val));
+        }
+    });
+
+    //将时间戳 格式化 时间
+    $('#get-timestamp-of-date-bt').click(function(){
+        var val  = $('#timestamp-input').val();
+        if (val != '') {
+            $('.timestamp').html($date().format('default',val));
         }
     });
 

@@ -5,10 +5,23 @@
 
 ###### v2.0为最新版本，简洁版的时间处理类库
 
+### 额外知识插入
+* web倒计时在IOS手机失效
+```javascript
+//起始时间，格式为yyyy-MM-DD hh:mm:ss
+var starttime = "2017-10-20 10:20:10";
+//将时间转为yyyy/MM/DD hh:mm:ss 格式，若起始时间为此格式，忽略
+starttime = new Date(starttime.replace(/-/g, "/"));
+//这样ios手机不兼容问题就解决了
+
+```
 
 ## 使用演示
 * 当前动态时间
 ```javascript
+//获取网络时间
+var nowtimeStr = $.ajax({async: false}).getResponseHeader("Date");
+
 // 使用1：
  $date({show:'.now'}).now();
  //如果让时间停止，如下操作：
