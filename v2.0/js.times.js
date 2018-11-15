@@ -141,7 +141,11 @@
                     is_num = true;
                 }
             }
-            var current_time = this.time();
+            if (typeof _this.options.now == 'undefined') {
+                var current_time = this.time();
+            } else {
+                var current_time = _this.options.now;
+            }
             if (! is_num) {
                 var end = _this.strtotime(_this.options.end);
             } else {
